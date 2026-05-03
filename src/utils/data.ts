@@ -81,7 +81,7 @@ export const projects = [
         github: "https://github.com/phuongwj/dal-microwaves"
     },
     {
-        name: "Dalhousie Syllabi Database",
+        name: "Dalhousie Syllabus Database",
         description: "Browse, search, and contribute Dalhousie course syllabi",
         image: "/placeholder.jpg",
         stack: ["AWS S3", "Gin", "Astro", "React"],
