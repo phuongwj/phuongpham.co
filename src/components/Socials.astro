@@ -1,0 +1,71 @@
+---
+import { IoLogoGithub } from "react-icons/io";
+import { FaLinkedin } from "react-icons/fa";
+import { IoIosMail } from "react-icons/io";
+---
+
+<div class="rounded-2xl border pt-5 px-3 pb-3 flex flex-col gap-0.5" style="border-color: var(--c-border); background: var(--c-surface); min-width: 160px;">
+  <p class="text-muted text-[11px] font-mono uppercase tracking-wider px-2 pb-1">Hit me up</p>
+  <a href="https://github.com/phuongwj" target="_blank" class="link-row group">
+    <div class="flex items-center gap-2.5">
+      <IoLogoGithub className="w-4 h-4 shrink-0" />
+      <span>GitHub</span>
+    </div>
+  </a>
+  <a href="https://www.linkedin.com/in/phuongwj/" target="_blank" class="link-row group">
+    <div class="flex items-center gap-2.5">
+      <FaLinkedin className="w-4 h-4 shrink-0" />
+      <span>LinkedIn</span>
+    </div>
+  </a>
+  <button id="copy-email" class="link-row group w-full" type="button">
+    <div class="flex items-center gap-2.5">
+      <IoIosMail className="w-4 h-4 shrink-0" />
+      <span>Copy Email</span>
+    </div>
+  </button>
+</div>
+
+<style>
+  .link-row {
+    display: flex;
+    align-items: center;
+    padding: 0.625rem 0.75rem;
+    border-radius: 0.625rem;
+    font-size: 0.8125rem;
+    color: var(--c-muted);
+    cursor: pointer;
+    background: transparent;
+    border: none;
+    text-align: left;
+    transition: background-color 200ms cubic-bezier(0.23, 1, 0.32, 1),
+                color 200ms cubic-bezier(0.23, 1, 0.32, 1);
+  }
+
+  @media (hover: hover) and (pointer: fine) {
+    .link-row:hover {
+      background: var(--c-surface-hover);
+      color: var(--c-heading);
+    }
+  }
+
+  .link-row:active {
+    background: var(--c-surface-hover);
+    color: var(--c-heading);
+  }
+</style>
+
+<script>
+  const btn = document.getElementById('copy-email');
+  if (btn) {
+    btn.addEventListener('click', async () => {
+      await navigator.clipboard.writeText('phuong.pham@dal.ca');
+      const span = btn.querySelector('span:not(.arrow)');
+      if (span) {
+        const original = span.textContent;
+        span.textContent = 'Copied!';
+        setTimeout(() => { span.textContent = original; }, 1500);
+      }
+    });
+  }
+</script>

@@ -1,50 +1,67 @@
 ---
-// Hero section
-
-import { IoLogoGithub } from "react-icons/io";
-import { FaLinkedin } from "react-icons/fa";
-import { IoIosDocument } from "react-icons/io";
- 
 ---
 
-<section class="max-w-xl mx-auto mt-40 px-4 font-sans">
-  <!-- Profile Card -->
-  <div class="flex flex-col items-start gap-3">
-    <img
-      src="/avatar.jpg"
-      alt="Avatar"
-      class="w-24 h-24 rounded-full object-cover"
-    />
+<section id="home" class="max-w-2xl mx-auto mt-20 px-4">
+  <div class="rounded-2xl border p-6 stagger-in" style="border-color: var(--c-border); background: var(--c-surface);">
+    <div class="flex items-center gap-6">
+      <div class="hero-avatar-wrap shrink-0">
+        <img
+          src="/avatar.jpg"
+          alt="Phuong Pham"
+          class="hero-avatar"
+        />
+      </div>
 
-    <p class="text-3xl font-bold text-heading">Phuong Pham</p>
-    <p class="text-body text-md">3rd Year Computer Science Student @ Dalhousie University</p>
+      <div class="flex flex-col gap-2 min-w-0">
+        <div class="rotating-subtitle overflow-hidden relative" id="subtitle-container">
+          <div id="subtitle-track" class="flex flex-col">
+            <p class="text-muted text-xs font-mono uppercase tracking-wider leading-4">3rd Year CS Student @ Dalhousie University</p>
+            <p class="text-muted text-xs font-mono uppercase tracking-wider leading-4">Software Engineer</p>
+          </div>
+        </div>
 
-    <div class="flex items-center gap-2 flex-wrap mt-1">
-      <a href="https://github.com/phuongwj" aria-label="GitHub" target="_blank" class="social-icon w-9 h-9 flex items-center justify-center text-xl" style="--hover-color: #FFFFFF;"><IoLogoGithub /></a>
-      <a href="https://www.linkedin.com/in/phuongwj/" aria-label="LinkedIn" target="_blank" class="social-icon w-9 h-9 flex items-center justify-center text-xl" style="--hover-color: #0A66C2;"><FaLinkedin /></a>
-      <a href="/resume.pdf" aria-label="Resume" target="_blank" class="social-icon w-9 h-9 flex items-center justify-center text-xl" style="--hover-color: #4CAF50;"><IoIosDocument /></a>
+        <h1 class="text-heading text-3xl font-bold leading-tight">Phuong Pham.</h1>
+
+        <p class="text-body text-[13px] leading-relaxed">
+          Building software thoughtfully, with attention to every detail from architecture to implementation.
+        </p>
+      </div>
     </div>
-  </div>
-
-  <!-- About Card -->
-  <div class="border border-border-default rounded-2xl p-6 mt-10">
-    <h2 class="text-base font-bold text-heading mb-3">About me</h2>
-    <p class="text-sm text-body leading-relaxed">
-      Originally from Ho Chi Minh City, Vietnam, now based in Halifax, Nova Scotia, Canada. I'm passionate about learning and working in areas
-      of Software Engineering, and AI/ML.
-    </p>
   </div>
 </section>
 
 <style>
-  .social-icon {
-    color: rgba(255, 255, 255, 0.45);
-    transition: color 0.3s, filter 0.3s, transform 0.3s;
+  .hero-avatar-wrap {
+    width: 120px;
+    height: 120px;
+    border-radius: 16px;
+    overflow: hidden;
   }
-
-  .social-icon:hover {
-    color: var(--hover-color);
-    filter: drop-shadow(0 0 6px var(--hover-color));
-    transform: scale(1.1);
+  .hero-avatar {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
   }
 </style>
+
+<script>
+  const track = document.getElementById('subtitle-track');
+  const container = document.getElementById('subtitle-container');
+  if (track && container) {
+    const items = Array.from(track.children) as HTMLElement[];
+    const count = items.length;
+    let current = 0;
+
+    container.style.height = items[0].offsetHeight + 'px';
+
+    setInterval(() => {
+      current = (current + 1) % count;
+      const offset = items.slice(0, current).reduce((sum, el) => sum + el.offsetHeight, 0);
+      container.style.transition = 'height 400ms cubic-bezier(0.23, 1, 0.32, 1)';
+      container.style.height = items[current].offsetHeight + 'px';
+      track.style.transition = 'transform 400ms cubic-bezier(0.23, 1, 0.32, 1)';
+      track.style.transform = `translateY(-${offset}px)`;
+    }, 5000);
+  }
+</script>

@@ -46,27 +46,26 @@ try {
   console.error('[GitHubContributions] Fetch failed:', e);
 }
 
-function getCellColor(count: number): string {
-  if (count === 0) return 'rgba(74, 222, 128, 0.07)';
-  if (count <= 2) return 'rgba(74, 222, 128, 0.28)';
-  if (count <= 5) return 'rgba(74, 222, 128, 0.55)';
-  return 'rgba(74, 222, 128, 0.88)';
+function getCellLevel(count: number): number {
+  if (count === 0) return 0;
+  if (count <= 2) return 1;
+  if (count <= 5) return 2;
+  return 3;
 }
 ---
 
-<div class="rounded-2xl border border-border-default bg-white/3 p-5 overflow-hidden">
-  <div class="flex items-start justify-between mb-4">
+<div class="rounded-2xl border p-4 overflow-hidden" style="border-color: var(--c-border); background: var(--c-surface);">
+  <div class="flex items-start justify-between mb-3">
     <p class="text-muted text-[11px] font-mono uppercase tracking-wider">github contributions</p>
-    <p id="gh-hover-info" class="text-subtle text-[10px] font-mono text-right"></p>
+    <p id="gh-hover-info" class="text-subtle text-[10px] font-mono text-right min-h-3.75 min-w-35">&nbsp;</p>
   </div>
 
-  <div class="flex gap-1 overflow-x-auto scrollbar-none">
+  <div class="flex gap-0.75 overflow-x-auto scrollbar-none">
     {weeks.map((week) => (
-      <div class="flex flex-col gap-1">
+      <div class="flex flex-col gap-0.75">
         {week.contributionDays.map((day) => (
           <div
-            class="gh-cell w-3 h-3 rounded-sm cursor-default"
-            style={`background-color: ${getCellColor(day.contributionCount)}`}
+            class={`gh-cell gh-level-${getCellLevel(day.contributionCount)} w-2.5 h-2.5 rounded-xs cursor-default`}
             data-count={day.contributionCount}
             data-date={day.date}
           />
@@ -75,8 +74,15 @@ function getCellColor(count: number): string {
     ))}
   </div>
 
-  <p class="text-subtle text-[10px] font-mono mt-3">{totalContributions} contributions this year</p>
+  <p class="text-subtle text-[10px] font-mono mt-2">{totalContributions} contributions this year</p>
 </div>
+
+<style>
+  .gh-level-0 { background-color: var(--c-gh-0); }
+  .gh-level-1 { background-color: var(--c-gh-1); }
+  .gh-level-2 { background-color: var(--c-gh-2); }
+  .gh-level-3 { background-color: var(--c-gh-3); }
+</style>
 
 <script>
   const info = document.getElementById('gh-hover-info');

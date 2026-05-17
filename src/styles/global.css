@@ -1,19 +1,86 @@
 @import "tailwindcss";
+@import "@fontsource/geist-sans/400.css";
+@import "@fontsource/geist-sans/500.css";
+@import "@fontsource/geist-sans/600.css";
+@import "@fontsource/geist-sans/700.css";
+
+:root {
+  --c-bg: oklch(0.985 0.003 250);
+  --c-bg-alpha: oklch(0.985 0.003 250 / 0.8);
+  --c-surface: oklch(0.975 0.003 250);
+  --c-surface-alt: oklch(0.96 0.003 250);
+  --c-surface-hover: oklch(0.95 0.003 250);
+  --c-nav-active: oklch(0.92 0.005 250);
+  --c-border: oklch(0.88 0.005 250);
+  --c-border-hover: oklch(0.82 0.008 250);
+  --c-subtle: oklch(0.72 0.005 250);
+  --c-muted-alt: oklch(0.6 0.005 250);
+  --c-muted: oklch(0.55 0.005 250);
+  --c-body: oklch(0.42 0.008 250);
+  --c-tooltip: oklch(0.3 0.01 250);
+  --c-heading: oklch(0.15 0.01 250);
+
+  --c-active-border: oklch(0.85 0.08 155);
+  --c-active-text: oklch(0.4 0.1 155);
+  --c-active-bg: oklch(0.95 0.03 155);
+  --c-active-dot: oklch(0.6 0.2 155);
+  --c-inactive-dot: oklch(0.72 0.005 250);
+
+  --c-inset: oklch(0.95 0.003 250);
+  --c-inset-item: oklch(0.985 0.003 250);
+
+  --c-gh-0: oklch(0.92 0.02 155);
+  --c-gh-1: oklch(0.78 0.1 155);
+  --c-gh-2: oklch(0.62 0.15 155);
+  --c-gh-3: oklch(0.52 0.15 155);
+}
+
+.dark {
+  --c-bg: oklch(0.13 0.015 250);
+  --c-bg-alpha: oklch(0.13 0.015 250 / 0.85);
+  --c-surface: oklch(0.18 0.012 250);
+  --c-surface-alt: oklch(0.22 0.01 250);
+  --c-surface-hover: oklch(0.24 0.012 250);
+  --c-nav-active: oklch(0.25 0.012 250);
+  --c-border: oklch(0.26 0.012 250);
+  --c-border-hover: oklch(0.32 0.012 250);
+  --c-subtle: oklch(0.45 0.008 250);
+  --c-muted-alt: oklch(0.5 0.008 250);
+  --c-muted: oklch(0.58 0.008 250);
+  --c-body: oklch(0.7 0.008 250);
+  --c-tooltip: oklch(0.85 0.005 250);
+  --c-heading: oklch(0.92 0.005 250);
+
+  --c-active-border: oklch(0.3 0.08 155);
+  --c-active-text: oklch(0.7 0.1 155);
+  --c-active-bg: oklch(0.22 0.05 155);
+  --c-active-dot: oklch(0.6 0.2 155);
+  --c-inactive-dot: oklch(0.45 0.008 250);
+
+  --c-inset: oklch(0.165 0.012 250);
+  --c-inset-item: oklch(0.22 0.01 250);
+
+  --c-gh-0: oklch(0.22 0.02 155);
+  --c-gh-1: oklch(0.4 0.1 155);
+  --c-gh-2: oklch(0.52 0.15 155);
+  --c-gh-3: oklch(0.62 0.15 155);
+}
 
 html,
 body {
   margin: 0;
   padding: 0;
   min-height: 100%;
-  background: linear-gradient(135deg, #060A19 0%, #080e20 30%, #0d1329 60%, #131e3d 100%);
-  background-color: #060A19;
+  background: var(--c-bg);
+  font-family: 'Geist Sans', system-ui, sans-serif;
+  transition: background-color 300ms cubic-bezier(0.23, 1, 0.32, 1);
 }
 
 .exp-extra {
   display: grid;
   grid-template-rows: 0fr;
   opacity: 0;
-  transition: grid-template-rows 0.32s ease, opacity 0.32s ease-in;
+  transition: grid-template-rows 0.32s cubic-bezier(0.23, 1, 0.32, 1), opacity 0.32s cubic-bezier(0.23, 1, 0.32, 1);
 }
 
 .exp-row:hover .exp-extra {
@@ -21,12 +88,76 @@ body {
   opacity: 1;
 }
 
+.contact-icon {
+  color: var(--c-muted);
+  transition: color 200ms cubic-bezier(0.23, 1, 0.32, 1);
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .contact-row:hover .contact-icon {
+    color: var(--icon-color);
+  }
+}
+
+/* Stagger entry animation */
+@keyframes stagger-in {
+  from {
+    opacity: 0;
+    transform: translateY(8px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.stagger-in > * {
+  opacity: 0;
+  animation: stagger-in 400ms cubic-bezier(0.23, 1, 0.32, 1) forwards;
+}
+
+.stagger-in > *:nth-child(1) { animation-delay: 0ms; }
+.stagger-in > *:nth-child(2) { animation-delay: 60ms; }
+.stagger-in > *:nth-child(3) { animation-delay: 120ms; }
+.stagger-in > *:nth-child(4) { animation-delay: 180ms; }
+.stagger-in > *:nth-child(5) { animation-delay: 240ms; }
+.stagger-in > *:nth-child(6) { animation-delay: 300ms; }
+.stagger-in > *:nth-child(7) { animation-delay: 360ms; }
+.stagger-in > *:nth-child(8) { animation-delay: 420ms; }
+
+/* Page-level fade in */
+@keyframes page-in {
+  from {
+    opacity: 0;
+    transform: translateY(6px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.page-enter {
+  animation: page-in 500ms cubic-bezier(0.23, 1, 0.32, 1) forwards;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .stagger-in > *,
+  .page-enter {
+    animation: none;
+    opacity: 1;
+    transform: none;
+  }
+}
+
 @theme {
-  --color-heading: #DDE4F0;
-  --color-body: rgba(255, 255, 255, 0.5);
-  --color-muted: rgba(255, 255, 255, 0.3);
-  --color-subtle: rgba(255, 255, 255, 0.15);
-  --color-surface-hover: rgba(255, 255, 255, 0.05);
-  --color-border-default: rgba(255, 255, 255, 0.14);
-  --color-border-hover: rgba(255, 255, 255, 0.1);
+  --color-heading: var(--c-heading);
+  --color-body: var(--c-body);
+  --color-muted: var(--c-muted);
+  --color-subtle: var(--c-subtle);
+  --color-surface-hover: var(--c-surface-hover);
+  --color-border-default: var(--c-border);
+  --color-border-hover: var(--c-border-hover);
+  --color-accent: oklch(0.65 0.15 250);
+  --color-accent-muted: oklch(0.55 0.10 250);
 }

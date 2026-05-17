@@ -1,0 +1,12 @@
+---
+import Project from '../components/Project.astro';
+import { Navbar } from '../components/Navbar';
+import Layout from '../layouts/Layout.astro';
+---
+
+<Layout>
+	<Navbar client:load currentPage="projects" />
+	<div class="mt-20">
+		<Project />
+	</div>
+</Layout>
