@@ -5,9 +5,7 @@ import cloudflare from '@astrojs/cloudflare';
 
 export default defineConfig({
   adapter: cloudflare({
-    platformProxy: {
-      enabled: true,
-    },
+    imageService: 'passthrough',
   }),
   integrations: [react()],
   vite: {
