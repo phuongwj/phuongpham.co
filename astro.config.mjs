@@ -6,7 +6,6 @@ import cloudflare from '@astrojs/cloudflare';
 export default defineConfig({
   adapter: cloudflare({
     imageService: 'passthrough',
-    session: false,
   }),
   integrations: [react()],
   vite: {
