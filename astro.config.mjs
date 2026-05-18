@@ -4,7 +4,6 @@ import react from '@astrojs/react';
 import cloudflare from '@astrojs/cloudflare';
 
 export default defineConfig({
-  output: 'hybrid',
   adapter: cloudflare(),
   integrations: [react()],
   vite: {
