@@ -1,51 +1,4 @@
 ---
-let weeks: {
-    contributionDays: {
-        contributionCount: number;
-        date: string
-    }[]
-}[] = [];
-let totalContributions = 0;
-
-try {
-  const response = await fetch('https://api.github.com/graphql', {
-    method: 'POST',
-    headers: {
-      'Authorization': `Bearer ${import.meta.env.GITHUB_TOKEN}`,
-      'Content-Type': 'application/json',
-    },
-    body: JSON.stringify({
-      query: `
-        query {
-          user(login: "${import.meta.env.GITHUB_USERNAME}") {
-            contributionsCollection {
-              contributionCalendar {
-                totalContributions
-                weeks {
-                  contributionDays {
-                    contributionCount
-                    date
-                  }
-                }
-              }
-            }
-          }
-        }
-      `
-    })
-  });
-
-  const json = await response.json();
-
-  const calendar = json?.data?.user?.contributionsCollection?.contributionCalendar;
-  if (calendar) {
-    weeks = calendar.weeks.slice(-34);
-    totalContributions = calendar.totalContributions;
-  }
-} catch (e) {
-  console.error('[GitHubContributions] Fetch failed:', e);
-}
-
 function getCellLevel(count: number): number {
   if (count === 0) return 0;
   if (count <= 2) return 1;
@@ -60,24 +13,14 @@ function getCellLevel(count: number): number {
     <p id="gh-hover-info" class="text-subtle text-[10px] font-mono text-right min-h-3.75 min-w-35">&nbsp;</p>
   </div>
 
-  <div class="flex gap-0.75 overflow-x-auto scrollbar-none">
-    {weeks.map((week) => (
-      <div class="flex flex-col gap-0.75">
-        {week.contributionDays.map((day) => (
-          <div
-            class={`gh-cell gh-level-${getCellLevel(day.contributionCount)} w-2.5 h-2.5 rounded-xs cursor-default`}
-            data-count={day.contributionCount}
-            data-date={day.date}
-          />
-        ))}
-      </div>
-    ))}
+  <div id="gh-grid" class="flex gap-0.75 overflow-x-auto scrollbar-none">
+    <p class="text-muted text-xs font-mono">Loading...</p>
   </div>
 
-  <p class="text-subtle text-[10px] font-mono mt-2">{totalContributions} contributions this year</p>
+  <p class="text-subtle text-[10px] font-mono mt-2" id="gh-total">&nbsp;</p>
 </div>
 
-<style>
+<style is:global>
   .gh-level-0 { background-color: var(--c-gh-0); }
   .gh-level-1 { background-color: var(--c-gh-1); }
   .gh-level-2 { background-color: var(--c-gh-2); }
@@ -86,6 +29,15 @@ function getCellLevel(count: number): number {
 
 <script>
   const info = document.getElementById('gh-hover-info');
+  const grid = document.getElementById('gh-grid');
+  const total = document.getElementById('gh-total');
+
+  function getCellLevel(count: number): number {
+    if (count === 0) return 0;
+    if (count <= 2) return 1;
+    if (count <= 5) return 2;
+    return 3;
+  }
 
   function formatDate(dateStr: string): string {
     return new Date(dateStr + 'T00:00:00').toLocaleDateString('en-US', {
@@ -95,24 +47,47 @@ function getCellLevel(count: number): number {
     });
   }
 
-  function formatLabel(count: string): string {
-    return count === '1' ? '1 contribution' : `${count} contributions`;
+  function formatLabel(count: number): string {
+    return count === 1 ? '1 contribution' : `${count} contributions`;
   }
 
-  function onCellHover(cell: Element) {
-    const count = cell.getAttribute('data-count');
-    const date = cell.getAttribute('data-date');
-    if (!info || !count || !date) return;
+  async function loadContributions() {
+    try {
+      const res = await fetch('/api/github-contributions');
+      const data: any = await res.json();
 
-    info.textContent = `${formatLabel(count)} on ${formatDate(date)}`;
+      if (!grid) return;
+      grid.innerHTML = '';
+
+      for (const week of data.weeks) {
+        const col = document.createElement('div');
+        col.className = 'flex flex-col gap-0.75';
+
+        for (const day of week.contributionDays) {
+          const cell = document.createElement('div');
+          cell.className = `gh-cell gh-level-${getCellLevel(day.contributionCount)} w-2.5 h-2.5 rounded-xs cursor-default`;
+          cell.dataset.count = String(day.contributionCount);
+          cell.dataset.date = day.date;
+
+          cell.addEventListener('mouseenter', () => {
+            if (info) info.textContent = `${formatLabel(day.contributionCount)} on ${formatDate(day.date)}`;
+          });
+          cell.addEventListener('mouseleave', () => {
+            if (info) info.textContent = '';
+          });
+
+          col.appendChild(cell);
+        }
+        grid.appendChild(col);
+      }
+
+      if (total) {
+        total.textContent = `${data.totalContributions} contributions this year`;
+      }
+    } catch (e) {
+      if (grid) grid.innerHTML = '<p class="text-muted text-xs font-mono">Failed to load</p>';
+    }
   }
 
-  function onCellLeave() {
-    if (info) info.textContent = '';
-  }
-
-  document.querySelectorAll('.gh-cell').forEach((cell) => {
-    cell.addEventListener('mouseenter', () => onCellHover(cell));
-    cell.addEventListener('mouseleave', onCellLeave);
-  });
+  loadContributions();
 </script>

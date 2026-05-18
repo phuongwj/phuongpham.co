@@ -90,7 +90,7 @@
   async function loadLastPlayed() {
     try {
       const res = await fetch('/api/lastplayed');
-      const data = await res.json();
+      const data: any = await res.json();
 
       const trackEl = document.getElementById('lp-track')!;
       const artistEl = document.getElementById('lp-artist')!;
