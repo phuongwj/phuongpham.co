@@ -1,78 +1,31 @@
 ---
-let track = "";
-let artist = "";
-let image = "";
-let isPlaying = false;
-
-try {
-  const res = await fetch(
-    `https://ws.audioscrobbler.com/2.0/?method=user.getRecentTracks&user=phuongwj&api_key=${import.meta.env.LASTFM_API_KEY}&format=json&limit=1`
-  );
-  const json = await res.json();
-  const recent = json?.recenttracks?.track?.[0];
-
-  if (recent) {
-    track = recent.name || "";
-    artist = recent.artist?.["#text"] || "";
-    isPlaying = recent["@attr"]?.nowplaying === "true";
-    const images = recent.image || [];
-    const large = images.find((i: any) => i.size === "large");
-    image = large?.["#text"] || "";
-  }
-} catch (e) {
-  console.error("[LastPlayed] Fetch failed:", e);
-}
-
-if (!track) {
-  track = "Nothing playing";
-  artist = "";
-}
 ---
 
-<div class="rounded-2xl border p-4 flex flex-col" style="border-color: var(--c-border); background: var(--c-surface);">
+<div class="rounded-2xl border p-4 flex flex-col" style="border-color: var(--c-border); background: var(--c-surface);" id="last-played">
   <div class="flex items-center justify-between mb-3">
     <p class="text-muted text-[11px] font-mono uppercase tracking-wider">last played</p>
-    <div class="flex items-center gap-1">
-      {isPlaying ? (
-        <div class="flex items-end gap-0.5 h-3">
-          <span class="eq-bar w-0.75 bg-green-400 rounded-full animate-eq-1" />
-          <span class="eq-bar w-0.75 bg-green-400 rounded-full animate-eq-2" />
-          <span class="eq-bar w-0.75 bg-green-400 rounded-full animate-eq-3" />
-        </div>
-      ) : (
-        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="text-muted">
-          <path d="M9 18V5l12-2v13" /><circle cx="6" cy="18" r="3" /><circle cx="18" cy="16" r="3" />
-        </svg>
-      )}
+    <div class="flex items-center gap-1" id="lp-status">
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="text-muted">
+        <path d="M9 18V5l12-2v13" /><circle cx="6" cy="18" r="3" /><circle cx="18" cy="16" r="3" />
+      </svg>
     </div>
   </div>
 
-  <div class="w-3/5 aspect-square rounded-xl overflow-hidden mb-3 mx-auto" style="background: var(--c-surface-hover);">
-    {image ? (
-      <img
-        src={image}
-        alt={track}
-        class="w-full h-full object-cover"
-        loading="lazy"
-      />
-    ) : (
-      <div class="w-full h-full flex items-center justify-center">
-        <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="text-muted">
-          <path d="M9 18V5l12-2v13" /><circle cx="6" cy="18" r="3" /><circle cx="18" cy="16" r="3" />
-        </svg>
-      </div>
-    )}
+  <div class="w-3/5 aspect-square rounded-xl overflow-hidden mb-3 mx-auto" style="background: var(--c-surface-hover);" id="lp-image-wrapper">
+    <div class="w-full h-full flex items-center justify-center">
+      <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="text-muted">
+        <path d="M9 18V5l12-2v13" /><circle cx="6" cy="18" r="3" /><circle cx="18" cy="16" r="3" />
+      </svg>
+    </div>
   </div>
 
   <div class="flex flex-col gap-0.5 min-w-0 overflow-hidden items-center text-center">
     <div class="marquee-wrapper">
-      <p class="marquee-text text-heading text-sm font-medium whitespace-nowrap">{track}</p>
+      <p class="marquee-text text-heading text-sm font-medium whitespace-nowrap" id="lp-track">Loading...</p>
     </div>
-    {artist && (
-      <div class="marquee-wrapper">
-        <p class="marquee-text text-body text-xs whitespace-nowrap">{artist}</p>
-      </div>
-    )}
+    <div class="marquee-wrapper" id="lp-artist-wrapper" style="display:none;">
+      <p class="marquee-text text-body text-xs whitespace-nowrap" id="lp-artist"></p>
+    </div>
   </div>
 </div>
 
@@ -120,7 +73,7 @@ if (!track) {
 </style>
 
 <script>
-  document.querySelectorAll('.marquee-wrapper').forEach((el) => {
+  function setupMarquee(el: Element) {
     const text = el.querySelector('.marquee-text') as HTMLElement;
     if (!text) return;
     if (text.scrollWidth > el.clientWidth) {
@@ -132,5 +85,51 @@ if (!track) {
       const duration = text.scrollWidth / speed;
       text.style.setProperty('--marquee-duration', duration + 's');
     }
-  });
+  }
+
+  async function loadLastPlayed() {
+    try {
+      const res = await fetch('/api/lastplayed');
+      const data = await res.json();
+
+      const trackEl = document.getElementById('lp-track')!;
+      const artistEl = document.getElementById('lp-artist')!;
+      const artistWrapper = document.getElementById('lp-artist-wrapper')!;
+      const imageWrapper = document.getElementById('lp-image-wrapper')!;
+      const statusEl = document.getElementById('lp-status')!;
+
+      trackEl.textContent = data.track || 'Nothing playing';
+
+      if (data.artist) {
+        artistEl.textContent = data.artist;
+        artistWrapper.style.display = '';
+      }
+
+      if (data.image) {
+        const img = document.createElement('img');
+        img.src = data.image;
+        img.alt = data.track;
+        img.className = 'w-full h-full object-cover';
+        img.loading = 'lazy';
+        imageWrapper.innerHTML = '';
+        imageWrapper.appendChild(img);
+      }
+
+      if (data.isPlaying) {
+        statusEl.innerHTML = `
+          <div class="flex items-end gap-0.5 h-3">
+            <span class="eq-bar w-0.75 bg-green-400 rounded-full animate-eq-1"></span>
+            <span class="eq-bar w-0.75 bg-green-400 rounded-full animate-eq-2"></span>
+            <span class="eq-bar w-0.75 bg-green-400 rounded-full animate-eq-3"></span>
+          </div>`;
+      }
+
+      document.querySelectorAll('#last-played .marquee-wrapper').forEach(setupMarquee);
+    } catch (e) {
+      const trackEl = document.getElementById('lp-track');
+      if (trackEl) trackEl.textContent = 'Nothing playing';
+    }
+  }
+
+  loadLastPlayed();
 </script>
