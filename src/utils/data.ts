@@ -65,7 +65,7 @@ export const projects = [
         name: "Medical AI Assistant",
         description: "Lightweight Retrieval-Augmented Generation FAQ chatbot for reducing clinician administrative burden in medical centres",
         stack: ["AWS EBS, VPC, S3, RDS", "Gemini", "HTML/CSS", "Node.js", "Express.js"],
-        github: "https://github.com/phuongwj/dal-microwaves"
+        github: "https://github.com/phuongwj/medical-ai-assistant"
     },
     {
         name: "Dalhousie Syllabus Database",
