@@ -1,15 +1,12 @@
 export const prerender = false;
 
-import { getSecret } from "../../lib/env";
-
-export async function GET() {
-  const token = getSecret("GITHUB_TOKEN");
-  const username = getSecret("GITHUB_USERNAME");
+export async function GET({ locals }: { locals: App.Locals }) {
+  const token = locals.runtime.env.GITHUB_TOKEN;
+  const username = locals.runtime.env.GITHUB_USERNAME;
 
   if (!token || !username) {
     return Response.json({ weeks: [], totalContributions: 0 });
   }
-
   const response = await fetch("https://api.github.com/graphql", {
     method: "POST",
     headers: {
@@ -37,18 +34,14 @@ export async function GET() {
       `,
     }),
   });
-
   if (!response.ok) {
     return Response.json({ weeks: [], totalContributions: 0 });
   }
-
   const json = await response.json() as any;
   const calendar = json?.data?.user?.contributionsCollection?.contributionCalendar;
-
   if (!calendar) {
     return Response.json({ weeks: [], totalContributions: 0 });
   }
-
   return Response.json({
     weeks: calendar.weeks.slice(-34),
     totalContributions: calendar.totalContributions,
