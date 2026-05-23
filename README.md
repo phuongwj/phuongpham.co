@@ -1,8 +1,6 @@
-# 🍵 phuong.dev
+# 🍵 phuongpham.co
 
 Personal portfolio site.
-
-Future enhancement (hopefully): The background gradient shifts based on the current time in Halifax — night, morning, afternoon, and evening each have their own palette. 
 
 ## 🛠 Stack
 
