@@ -21,7 +21,7 @@ export const experience = [
     },
     {
         company: "SpryPoint",
-        position: "Software Developer Intern",
+        position: "Software Engineer Intern",
         location: "Halifax, NS",
         duration: "May - Aug 2025",
         image: "/logos/logo_sprypoint.png",
@@ -31,7 +31,7 @@ export const experience = [
     },
     {
         company: "PRAXES Medical Group",
-        position: "Full-Stack Developer Intern",
+        position: "Full-Stack Software Engineer Intern",
         location: "Halifax, NS",
         duration: "Jan 2026 - Apr 2026",
         image: "/logos/logo_praxes.jpg",
