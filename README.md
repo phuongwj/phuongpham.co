@@ -4,9 +4,9 @@ Personal portfolio site.
 
 ## 🛠 Stack
 
-- 🚀 **Astro** (static site framework)
-- 💥 **React** (interactive components via `client:load`)
-- 🎨 **Tailwind CSS v4**
+- Astro
+- React
+- TailwindCSS
 
 ## 💻 Dev
 
