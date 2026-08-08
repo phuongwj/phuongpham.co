@@ -84,21 +84,25 @@ export function Navbar({ currentPage: initialPage }: { currentPage: string }) {
   const { trackRef, rect } = useActiveRect(currentPage);
 
   return (
-    <nav className="fixed top-5 left-1/2 -translate-x-1/2 z-50 w-full max-w-2xl px-4 pointer-events-none">
+    <nav className="fixed top-12 left-1/2 -translate-x-1/2 z-50 w-full max-w-2xl px-4 pointer-events-none">
       <div
-        className="inline-flex items-center gap-1 p-[3px] rounded-[10px] border backdrop-blur-xl pointer-events-auto"
+        className="nav-glass inline-flex items-center gap-1 p-[3px] rounded-[10px] border pointer-events-auto"
         style={{
-          borderColor: "var(--c-border)",
-          background: "var(--c-surface-alt)",
+          borderColor: "var(--c-nav-glass-border)",
+          background: "var(--c-nav-glass)",
+          boxShadow: "var(--c-nav-glass-lift)",
+          backdropFilter: "blur(20px) saturate(1.5)",
+          WebkitBackdropFilter: "blur(20px) saturate(1.5)",
         }}
       >
         <div ref={trackRef} className="relative flex items-center">
           {rect && (
             <div
-              className="absolute top-0 bottom-0 rounded-lg shadow-sm transition-[transform,width] duration-[450ms] ease-[cubic-bezier(0.32,0.72,0,1)]"
+              className="absolute top-0 bottom-0 rounded-lg transition-[transform,width] duration-[450ms] ease-[cubic-bezier(0.32,0.72,0,1)]"
               style={{
-                background: "var(--c-bg)",
-                border: "1px solid var(--c-border)",
+                background: "var(--c-nav-pill)",
+                border: "1px solid var(--c-nav-pill-border)",
+                boxShadow: "var(--c-nav-pill-lift)",
                 width: rect.width,
                 transform: `translateX(${rect.left}px)`,
               }}
@@ -110,10 +114,12 @@ export function Navbar({ currentPage: initialPage }: { currentPage: string }) {
               href={href}
               data-page={id}
               aria-current={currentPage === id ? "page" : undefined}
-              className="relative z-10 flex items-center gap-1.5 px-2.5 py-1 rounded-lg text-[12.5px] whitespace-nowrap transition-colors duration-200 ease-[cubic-bezier(0.23,1,0.32,1)]"
+              className="nav-item relative z-10 flex items-center gap-1.5 px-2.5 py-1 rounded-lg text-[12.5px] whitespace-nowrap transition-colors duration-200 ease-[cubic-bezier(0.23,1,0.32,1)]"
               style={{
                 color:
-                  currentPage === id ? "var(--c-heading)" : "var(--c-muted)",
+                  currentPage === id
+                    ? "var(--c-nav-item-active)"
+                    : "var(--c-nav-item)",
                 fontWeight: currentPage === id ? 500 : 400,
               }}
             >
@@ -126,15 +132,15 @@ export function Navbar({ currentPage: initialPage }: { currentPage: string }) {
         <div className="flex items-center">
           <span
             className="w-px h-4 mr-1"
-            style={{ background: "var(--c-border)" }}
+            style={{ background: "var(--c-nav-divider)" }}
           />
 
           <button
             onClick={toggle}
             aria-label="Toggle theme"
-            className="w-6 h-6 flex items-center justify-center rounded-full cursor-pointer transition-[color,background,transform] duration-200 ease-[cubic-bezier(0.23,1,0.32,1)] active:scale-90"
+            className="nav-toggle w-6 h-6 flex items-center justify-center rounded-full cursor-pointer transition-[color,background,transform] duration-200 ease-[cubic-bezier(0.23,1,0.32,1)] active:scale-90"
             style={{
-              color: "var(--c-muted)",
+              color: "var(--c-nav-item)",
               background: "transparent",
               border: "none",
             }}

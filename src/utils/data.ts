@@ -22,10 +22,10 @@ export const experience = [
     {
         company: "SpryPoint",
         position: "Software Engineer Intern",
-        location: "Halifax, NS",
+        location: "Charlottetown, PEI (Remote)",
         duration: "May - Aug 2025",
         image: "/logos/logo_sprypoint.png",
-        description: "Built and maintained a Java-based PDF reporting system used across 5 water utilities, enabling consistent generation of regulatory reports. Developed reusable renderer components and shipped production reports while improving maintainability and reducing ad hoc report creation.",
+        description: "Built and maintained a Java-based PDF reporting system used across 5 water utilities, reducing ad hoc report development time by 37% through developing reusable renderer classes.",
         stack: ["Java", "JavaScript", "Play Framework", "KnockoutJS", "jQuery"],
         active: false
     },
@@ -35,7 +35,7 @@ export const experience = [
         location: "Halifax, NS",
         duration: "Jan 2026 - Apr 2026",
         image: "/logos/logo_praxes.jpg",
-        description: "Migrated a core legacy admin feature from Java/JSP/MSSQL system into a modern multi-tenant Go/Vue/PostgreSQL stack serving 80+ organizations. Implemented secure REST APIs, event-driven data synchronization, and cloud infrastructure to support tenant isolant and compliance requirements",
+        description: "Migrated legacy admin infrastructure to a multi-tenant Go/Vue/PostgreSQL stack with secure APIs and event-driven synchronization.",
         stack: ["Go", "TypeScript", "Vue.js", "PostgreSQL"],
         active: false
     }

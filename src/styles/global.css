@@ -33,6 +33,19 @@
   --c-gh-1: oklch(0.78 0.1 155);
   --c-gh-2: oklch(0.62 0.15 155);
   --c-gh-3: oklch(0.52 0.15 155);
+
+  /* glass navbar: white at high alpha over nothing */
+  --c-nav-glass: oklch(1 0 0 / 0.6);
+  --c-nav-glass-border: oklch(0.2 0.02 250 / 0.09);
+  --c-nav-glass-lift: inset 0 1px 0 oklch(1 0 0 / 0.8), 0 8px 24px -14px oklch(0.2 0.02 250 / 0.3);
+  --c-nav-pill: oklch(1 0 0 / 0.85);
+  --c-nav-pill-border: oklch(0.2 0.02 250 / 0.08);
+  --c-nav-pill-lift: inset 0 1px 0 oklch(1 0 0 / 0.1);
+  --c-nav-divider: oklch(0.2 0.02 250 / 0.12);
+  --c-nav-item: oklch(0.55 0.005 250);
+  --c-nav-item-hover: oklch(0.3 0.008 250);
+  --c-nav-item-active: oklch(0.15 0.01 250);
+  --c-nav-tgl-hover-bg: oklch(0.2 0.02 250 / 0.05);
 }
 
 .dark {
@@ -64,6 +77,43 @@
   --c-gh-1: oklch(0.4 0.1 155);
   --c-gh-2: oklch(0.52 0.15 155);
   --c-gh-3: oklch(0.62 0.15 155);
+
+  /* glass navbar: white at low alpha over a tinted neutral */
+  --c-nav-glass: oklch(0.24 0.012 250 / 0.55);
+  --c-nav-glass-border: oklch(1 0 0 / 0.1);
+  --c-nav-glass-lift: inset 0 1px 0 oklch(1 0 0 / 0.08), 0 10px 30px -14px oklch(0 0 0 / 0.7);
+  --c-nav-pill: oklch(1 0 0 / 0.085);
+  --c-nav-pill-border: oklch(1 0 0 / 0.12);
+  --c-nav-pill-lift: inset 0 1px 0 oklch(1 0 0 / 0.1);
+  --c-nav-divider: oklch(1 0 0 / 0.12);
+  --c-nav-item: oklch(0.65 0.008 250);
+  --c-nav-item-hover: oklch(0.85 0.006 250);
+  --c-nav-item-active: oklch(0.97 0.004 250);
+  --c-nav-tgl-hover-bg: oklch(1 0 0 / 0.07);
+}
+
+.exp-card {
+  transition: border-color 200ms cubic-bezier(0.23, 1, 0.32, 1),
+              background-color 200ms cubic-bezier(0.23, 1, 0.32, 1);
+}
+
+@media (hover: hover) and (pointer: fine) {
+  /* inline styles set these too, so the hover has to win the cascade */
+  .exp-card:hover {
+    border-color: var(--c-border-hover) !important;
+    background: var(--c-surface-hover) !important;
+  }
+}
+
+@media (hover: hover) and (pointer: fine) {
+  /* the component sets color inline, so these have to win the cascade */
+  .nav-item:not([aria-current="page"]):hover,
+  .nav-toggle:hover {
+    color: var(--c-nav-item-hover) !important;
+  }
+  .nav-toggle:hover {
+    background: var(--c-nav-tgl-hover-bg);
+  }
 }
 
 html,

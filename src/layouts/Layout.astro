@@ -16,10 +16,15 @@ import "../styles/global.css";
 		<title>Phuong Pham - Software Engineer</title>
 		<script is:inline>
 			(function() {
-				const theme = localStorage.getItem('theme');
-				if (theme === 'dark' || (!theme && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
-					document.documentElement.classList.add('dark');
+				function applyTheme() {
+					const theme = localStorage.getItem('theme');
+					const dark = theme === 'dark' ||
+						(!theme && window.matchMedia('(prefers-color-scheme: dark)').matches);
+					document.documentElement.classList.toggle('dark', dark);
 				}
+				applyTheme();
+				// view transitions swap in a fresh <html>, so re-apply before it paints
+				document.addEventListener('astro:after-swap', applyTheme);
 			})();
 		</script>
 	</head>
