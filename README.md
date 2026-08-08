@@ -1,18 +1,7 @@
 # 🍵 phuongpham.co
 
-Personal portfolio site.
-
-## 🛠 Stack
+Personal portfolio site built with:
 
 - Astro
 - React
 - TailwindCSS
-
-## 💻 Dev
-
-```sh
-npm install
-npm run dev
-```
-
-Runs at `localhost:4321`.
