@@ -9,163 +9,74 @@ const initialsMap: Record<string, string> = {
 };
 
 const reversed = [...projects].reverse();
-const featured = reversed[0];
-const rest = reversed.slice(1);
-const featuredInitials = initialsMap[featured.name];
 ---
 
-<div class="flex flex-col gap-3 stagger-in">
-  <!-- Featured project -->
-  <a
-    href={featured.github}
-    target="_blank"
-    class="project-link project-card rounded-2xl border p-5 block group"
-  >
-    <div
-      class="project-thumb-featured w-full aspect-video rounded-xl flex items-center justify-center mb-4"
-      data-project={featured.name}
+<div class="grid grid-cols-1 sm:grid-cols-2 gap-3 stagger-in">
+  {reversed.map((project) => (
+    <a
+      href={project.github}
+      target="_blank"
+      class="project-card rounded-2xl border p-4 flex flex-col"
     >
-      <span
-        class="project-initials text-3xl font-semibold select-none"
-        data-project={featured.name}
+      <div
+        class="project-thumb rounded-xl aspect-[4/3] flex items-center justify-center mb-4"
+        data-project={project.name}
       >
-        {featuredInitials}
-      </span>
-    </div>
-
-    <p class="project-title font-semibold text-base">
-      {featured.name}
-    </p>
-
-    <p class="project-desc text-sm mt-1.5">
-      {featured.description}
-    </p>
-
-    <div class="flex items-center gap-1.5 mt-2.5 flex-wrap">
-      {featured.stack.map((tech) => (
-        <span class="project-tag text-[11px] px-2 py-0.5 rounded-md border">
-          {tech}
-        </span>
-      ))}
-    </div>
-
-    <p class="project-readmore text-sm font-medium mt-3 flex items-center gap-1.5">
-      Read more
-      <span class="inline-block transition-transform duration-200 group-hover:translate-x-0.5">&rarr;</span>
-    </p>
-  </a>
-
-  <!-- Compact project cards -->
-  {rest.map((project) => {
-    const initials = initialsMap[project.name];
-    return (
-      <a
-        href={project.github}
-        target="_blank"
-        class="project-link project-card rounded-2xl border p-4 flex items-center gap-4 group"
-      >
-        <div
-          class="project-thumb w-20 h-20 rounded-xl flex items-center justify-center shrink-0"
+        <span
+          class="project-initials text-2xl font-semibold select-none"
           data-project={project.name}
         >
-          <span
-            class="project-initials text-sm font-semibold select-none"
-            data-project={project.name}
-          >
-            {initials}
-          </span>
-        </div>
-
-        <div class="flex-1 min-w-0">
-          <p class="project-title font-semibold text-sm">
-            {project.name}
-          </p>
-          <p class="project-desc text-sm mt-0.5">
-            {project.description}
-          </p>
-          <div class="flex items-center gap-1.5 mt-2 flex-wrap">
-            {project.stack.map((tech) => (
-              <span class="project-tag text-[11px] px-2 py-0.5 rounded-md border">
-                {tech}
-              </span>
-            ))}
-          </div>
-        </div>
-
-        <span class="project-arrow shrink-0 text-sm transition-transform duration-200 group-hover:translate-x-0.5">
-          &rarr;
+          {initialsMap[project.name]}
         </span>
-      </a>
-    );
-  })}
+      </div>
+
+      <p class="project-title font-semibold text-[13.5px] leading-snug">
+        {project.name}
+      </p>
+      <p class="project-desc text-[12.5px] leading-snug mt-1">
+        {project.description}
+      </p>
+    </a>
+  ))}
 </div>
 
 <style>
   .project-card {
     border-color: var(--c-border);
-    background: var(--c-surface);
+    background: var(--c-card);
+    text-decoration: none;
+    transition: border-color 200ms cubic-bezier(0.23, 1, 0.32, 1),
+                box-shadow 200ms cubic-bezier(0.23, 1, 0.32, 1),
+                transform 200ms cubic-bezier(0.23, 1, 0.32, 1);
   }
+
+  @media (hover: hover) and (pointer: fine) {
+    .project-card:hover {
+      border-color: var(--c-border-hover);
+      box-shadow: var(--c-card-lift);
+      transform: translateY(-1px);
+    }
+  }
+
+  .project-card:active { transform: scale(0.995); }
+
   .project-title { color: var(--c-heading); }
-  .project-desc { color: var(--c-body); }
-  .project-readmore { color: var(--c-heading); }
-  .project-arrow { color: var(--c-muted-alt); }
-  .project-tag {
-    color: var(--c-muted);
-    border-color: var(--c-border);
-    background: var(--c-surface-alt);
-  }
+  .project-desc { color: var(--c-muted); }
 
-  /* Light mode gradients */
-  .project-thumb-featured[data-project="My Turn"],
-  .project-thumb[data-project="My Turn"] {
-    background: linear-gradient(135deg, oklch(0.92 0.05 290), oklch(0.88 0.06 280), oklch(0.94 0.03 300));
-  }
-  .project-thumb-featured[data-project="Women in Technology Society Bulletin Board"],
-  .project-thumb[data-project="Women in Technology Society Bulletin Board"] {
-    background: linear-gradient(135deg, oklch(0.94 0.05 130), oklch(0.9 0.06 110));
-  }
-  .project-thumb-featured[data-project="Medical AI Assistant"],
-  .project-thumb[data-project="Medical AI Assistant"] {
-    background: linear-gradient(135deg, oklch(0.94 0.05 70), oklch(0.92 0.06 50));
-  }
-  .project-thumb-featured[data-project="Dalhousie Syllabus Database"],
-  .project-thumb[data-project="Dalhousie Syllabus Database"] {
-    background: linear-gradient(135deg, oklch(0.94 0.05 250), oklch(0.9 0.06 230));
-  }
+  /* the thumb is a quiet inset panel; colour comes from the mark, not the field */
+  .project-thumb { background: var(--c-surface-alt); }
 
-  .project-initials[data-project="My Turn"] { color: oklch(0.7 0.06 290); opacity: 0.6; }
-  .project-initials[data-project="Women in Technology Society Bulletin Board"] { color: oklch(0.7 0.08 130); opacity: 0.6; }
-  .project-initials[data-project="Medical AI Assistant"] { color: oklch(0.72 0.08 60); opacity: 0.6; }
-  .project-initials[data-project="Dalhousie Syllabus Database"] { color: oklch(0.68 0.06 250); opacity: 0.6; }
+  .project-initials[data-project="My Turn"] { color: oklch(0.7 0.09 290); }
+  .project-initials[data-project="Women in Technology Society Bulletin Board"] { color: oklch(0.68 0.1 130); }
+  .project-initials[data-project="Medical AI Assistant"] { color: oklch(0.72 0.1 60); }
+  .project-initials[data-project="Dalhousie Syllabus Database"] { color: oklch(0.66 0.09 250); }
 
-  /* Dark mode gradients */
-  :global(.dark) .project-thumb-featured[data-project="My Turn"],
-  :global(.dark) .project-thumb[data-project="My Turn"] {
-    background: linear-gradient(135deg, oklch(0.3 0.06 290), oklch(0.26 0.07 280), oklch(0.32 0.04 300));
-  }
-  :global(.dark) .project-thumb-featured[data-project="Women in Technology Society Bulletin Board"],
-  :global(.dark) .project-thumb[data-project="Women in Technology Society Bulletin Board"] {
-    background: linear-gradient(135deg, oklch(0.3 0.06 130), oklch(0.26 0.07 110));
-  }
-  :global(.dark) .project-thumb-featured[data-project="Medical AI Assistant"],
-  :global(.dark) .project-thumb[data-project="Medical AI Assistant"] {
-    background: linear-gradient(135deg, oklch(0.3 0.06 70), oklch(0.28 0.07 50));
-  }
-  :global(.dark) .project-thumb-featured[data-project="Dalhousie Syllabus Database"],
-  :global(.dark) .project-thumb[data-project="Dalhousie Syllabus Database"] {
-    background: linear-gradient(135deg, oklch(0.28 0.05 250), oklch(0.25 0.06 230));
-  }
+  :global(.dark) .project-initials[data-project="My Turn"] { color: oklch(0.62 0.1 290); }
+  :global(.dark) .project-initials[data-project="Women in Technology Society Bulletin Board"] { color: oklch(0.6 0.11 130); }
+  :global(.dark) .project-initials[data-project="Medical AI Assistant"] { color: oklch(0.64 0.11 60); }
+  :global(.dark) .project-initials[data-project="Dalhousie Syllabus Database"] { color: oklch(0.58 0.1 250); }
 
-  :global(.dark) .project-initials[data-project="My Turn"] { color: oklch(0.55 0.08 290); }
-  :global(.dark) .project-initials[data-project="Women in Technology Society Bulletin Board"] { color: oklch(0.55 0.08 130); }
-  :global(.dark) .project-initials[data-project="Medical AI Assistant"] { color: oklch(0.55 0.08 60); }
-  :global(.dark) .project-initials[data-project="Dalhousie Syllabus Database"] { color: oklch(0.5 0.06 250); }
-
-  .project-link {
-    transition: background-color 200ms cubic-bezier(0.23, 1, 0.32, 1),
-                transform 160ms cubic-bezier(0.23, 1, 0.32, 1);
-  }
-  .project-link:active {
-    transform: scale(0.99);
+  @media (prefers-reduced-motion: reduce) {
+    .project-card:hover { transform: none; }
   }
 </style>

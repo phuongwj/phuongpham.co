@@ -34,18 +34,21 @@
   --c-gh-2: oklch(0.62 0.15 155);
   --c-gh-3: oklch(0.52 0.15 155);
 
-  /* glass navbar: white at high alpha over nothing */
-  --c-nav-glass: oklch(1 0 0 / 0.6);
-  --c-nav-glass-border: oklch(0.2 0.02 250 / 0.09);
-  --c-nav-glass-lift: inset 0 1px 0 oklch(1 0 0 / 0.8), 0 8px 24px -14px oklch(0.2 0.02 250 / 0.3);
-  --c-nav-pill: oklch(1 0 0 / 0.85);
-  --c-nav-pill-border: oklch(0.2 0.02 250 / 0.08);
-  --c-nav-pill-lift: inset 0 1px 0 oklch(1 0 0 / 0.1);
+  /* flat segmented navbar: recessed track, active punched back to page colour */
+  --c-divider: oklch(0.925 0.004 250);
   --c-nav-divider: oklch(0.2 0.02 250 / 0.12);
+  --c-nav-blur: oklch(0.985 0.003 250 / 0.72);
   --c-nav-item: oklch(0.55 0.005 250);
   --c-nav-item-hover: oklch(0.3 0.008 250);
   --c-nav-item-active: oklch(0.15 0.01 250);
   --c-nav-tgl-hover-bg: oklch(0.2 0.02 250 / 0.05);
+
+  /* widget cards: white, borderless, lifted off the page by shadow */
+  --c-card: oklch(1 0 0);
+  --c-card-lift: 0 1px 2px oklch(0.2 0.02 250 / 0.05),
+                 0 6px 16px -8px oklch(0.2 0.02 250 / 0.14);
+  --c-card-lift-hover: 0 1px 2px oklch(0.2 0.02 250 / 0.06),
+                       0 10px 24px -10px oklch(0.2 0.02 250 / 0.2);
 }
 
 .dark {
@@ -78,30 +81,75 @@
   --c-gh-2: oklch(0.52 0.15 155);
   --c-gh-3: oklch(0.62 0.15 155);
 
-  /* glass navbar: white at low alpha over a tinted neutral */
-  --c-nav-glass: oklch(0.24 0.012 250 / 0.55);
-  --c-nav-glass-border: oklch(1 0 0 / 0.1);
-  --c-nav-glass-lift: inset 0 1px 0 oklch(1 0 0 / 0.08), 0 10px 30px -14px oklch(0 0 0 / 0.7);
-  --c-nav-pill: oklch(1 0 0 / 0.085);
-  --c-nav-pill-border: oklch(1 0 0 / 0.12);
-  --c-nav-pill-lift: inset 0 1px 0 oklch(1 0 0 / 0.1);
+  /* flat segmented navbar: track sits below the page, pill rises back to it */
+  --c-divider: oklch(0.225 0.012 250);
   --c-nav-divider: oklch(1 0 0 / 0.12);
+  --c-nav-blur: oklch(0.13 0.015 250 / 0.72);
   --c-nav-item: oklch(0.65 0.008 250);
   --c-nav-item-hover: oklch(0.85 0.006 250);
   --c-nav-item-active: oklch(0.97 0.004 250);
   --c-nav-tgl-hover-bg: oklch(1 0 0 / 0.07);
+
+  /* dark has no usable cast shadow, so the lift comes from a lighter surface
+     plus a top-edge highlight; the shadow only deepens the seam */
+  --c-card: oklch(0.195 0.012 250);
+  --c-card-lift: inset 0 1px 0 oklch(1 0 0 / 0.045),
+                 0 4px 14px -8px oklch(0 0 0 / 0.55);
+  --c-card-lift-hover: inset 0 1px 0 oklch(1 0 0 / 0.07),
+                       0 8px 20px -10px oklch(0 0 0 / 0.65);
 }
 
+/* flat at rest; the surface only appears under the pointer */
 .exp-card {
-  transition: border-color 200ms cubic-bezier(0.23, 1, 0.32, 1),
-              background-color 200ms cubic-bezier(0.23, 1, 0.32, 1);
+  position: relative;
+  border-radius: 12px;
+  background: transparent;
+  transition: background-color 200ms cubic-bezier(0.23, 1, 0.32, 1);
+}
+
+/* hairline between entries, inset so it never runs into the row's rounded edge */
+.exp-card + .exp-card::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 12px;
+  right: 12px;
+  height: 1px;
+  background: var(--c-divider);
+  transition: opacity 200ms cubic-bezier(0.23, 1, 0.32, 1);
 }
 
 @media (hover: hover) and (pointer: fine) {
-  /* inline styles set these too, so the hover has to win the cascade */
   .exp-card:hover {
-    border-color: var(--c-border-hover) !important;
-    background: var(--c-surface-hover) !important;
+    background: var(--c-surface-hover);
+  }
+  /* a rule touching the filled row reads as a seam — drop both that meet it */
+  .exp-card:hover::before,
+  .exp-card:hover + .exp-card::before {
+    opacity: 0;
+  }
+}
+
+/* underline tabs — text-decoration rather than a border, so the rule hugs the
+   baseline like the inline links in the hero do */
+.nav-tab {
+  text-decoration: none;
+  text-underline-offset: 3px;
+  text-decoration-thickness: 1px;
+  transition: color 200ms cubic-bezier(0.23, 1, 0.32, 1),
+              text-decoration-color 200ms cubic-bezier(0.23, 1, 0.32, 1),
+              font-size 300ms cubic-bezier(0.23, 1, 0.32, 1);
+}
+.nav-tab[aria-current="page"] {
+  text-decoration: underline;
+  text-decoration-color: var(--c-nav-item-hover);
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .nav-tab:not([aria-current="page"]):hover {
+    color: var(--c-nav-item-hover) !important;
+    text-decoration: underline;
+    text-decoration-color: var(--c-subtle);
   }
 }
 
@@ -132,16 +180,51 @@ html.theme-anim body {
   transition: background-color 300ms cubic-bezier(0.23, 1, 0.32, 1);
 }
 
+/* everything that carries a themed colour crossfades on the same clock as the
+   page, so nothing pops ahead of the background */
+html.theme-anim nav,
+html.theme-anim .nav-tab,
+html.theme-anim .nav-toggle,
+html.theme-anim .exp-card,
+html.theme-anim .exp-card * {
+  transition: background-color 300ms cubic-bezier(0.23, 1, 0.32, 1),
+              color 300ms cubic-bezier(0.23, 1, 0.32, 1),
+              border-color 300ms cubic-bezier(0.23, 1, 0.32, 1),
+              box-shadow 300ms cubic-bezier(0.23, 1, 0.32, 1),
+              text-decoration-color 300ms cubic-bezier(0.23, 1, 0.32, 1) !important;
+}
+
 .exp-extra {
   display: grid;
   grid-template-rows: 0fr;
   opacity: 0;
-  transition: grid-template-rows 0.32s cubic-bezier(0.23, 1, 0.32, 1), opacity 0.32s cubic-bezier(0.23, 1, 0.32, 1);
+  transition: grid-template-rows 0.32s cubic-bezier(0.23, 1, 0.32, 1),
+              opacity 0.32s cubic-bezier(0.23, 1, 0.32, 1);
 }
-
-.exp-row:hover .exp-extra {
+.exp-extra > * {
+  overflow: hidden;
+}
+.exp-extra[data-open="true"] {
   grid-template-rows: 1fr;
   opacity: 1;
+}
+
+.exp-toggle {
+  background: none;
+  border: none;
+  cursor: pointer;
+  font: inherit;
+}
+.exp-chevron {
+  transition: transform 0.28s cubic-bezier(0.23, 1, 0.32, 1),
+              color 0.2s cubic-bezier(0.23, 1, 0.32, 1);
+}
+.exp-toggle:hover .exp-chevron {
+  color: var(--c-muted) !important;
+}
+.exp-toggle:focus-visible {
+  outline: 2px solid var(--c-active-dot);
+  outline-offset: -2px;
 }
 
 .contact-icon {

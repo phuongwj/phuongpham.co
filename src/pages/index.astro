@@ -1,5 +1,6 @@
 ---
 import Hero from '../components/Hero.astro';
+import { ExperienceList } from '../components/ExperienceList';
 import AboutSection from '../components/AboutSection.astro';
 import { Navbar } from '../components/Navbar';
 import Layout from '../layouts/Layout.astro';
@@ -8,5 +9,11 @@ import Layout from '../layouts/Layout.astro';
 <Layout>
 	<Navbar client:load currentPage="home" transition:persist transition:name="navbar" />
 	<Hero />
+
+	<section id="work" class="max-w-2xl mx-auto px-4 mt-24 stagger-in" style="animation-delay: 120ms;">
+		<h2 class="text-body text-[14px] font-medium mb-3">Work</h2>
+		<ExperienceList client:load />
+	</section>
+
 	<AboutSection />
 </Layout>

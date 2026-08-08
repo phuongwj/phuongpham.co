@@ -5,7 +5,7 @@ export const experience = [
         location: "Halifax, NS",
         duration: "Jun - Aug 2024",
         image: "/logos/logo_dal.png",
-        description: "Developed responsive, accessible web interfaces with bilingual support",
+        description: "Built responsive, accessible interfaces with bilingual support.",
         stack: ["JavaScript", "React", "Sass", "Framer Motion", "i18n"],
         active: false
     },
@@ -15,7 +15,7 @@ export const experience = [
         location: "Halifax, NS",
         duration: "Sep 2024 - May 2025",
         image: "/logos/logo_dal.png",
-        description: "Intro to Computer Programming (CSCI 1105), Computer Science (CSCI 1110), Web Development (CSCI 1170)",
+        description: "Taught intro programming, computer science and web development.",
         stack: ["Java", "JavaScript"],
         active: false
     },
@@ -25,7 +25,7 @@ export const experience = [
         location: "Charlottetown, PEI (Remote)",
         duration: "May - Aug 2025",
         image: "/logos/logo_sprypoint.png",
-        description: "Built and maintained a Java-based PDF reporting system used across 5 water utilities, reducing ad hoc report development time by 37% through developing reusable renderer classes.",
+        description: "Built a Java PDF reporting system used by 5 water utilities.",
         stack: ["Java", "JavaScript", "Play Framework", "KnockoutJS", "jQuery"],
         active: false
     },
@@ -35,7 +35,7 @@ export const experience = [
         location: "Halifax, NS",
         duration: "Jan 2026 - Apr 2026",
         image: "/logos/logo_praxes.jpg",
-        description: "Migrated legacy admin infrastructure to a multi-tenant Go/Vue/PostgreSQL stack with secure APIs and event-driven synchronization.",
+        description: "Migrated legacy admin systems to a multi-tenant Go/Vue stack.",
         stack: ["Go", "TypeScript", "Vue.js", "PostgreSQL"],
         active: false
     }
