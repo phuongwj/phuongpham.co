@@ -1,0 +1,177 @@
+---
+---
+
+<div class="lp-line" id="lp-line" hidden>
+  <svg
+    class="lp-icon"
+    width="13"
+    height="13"
+    viewBox="0 0 24 24"
+    fill="none"
+    stroke="currentColor"
+    stroke-width="2"
+    stroke-linecap="round"
+    stroke-linejoin="round"
+    aria-hidden="true"
+  >
+    <path d="M9 18V5l12-2v13" /><circle cx="6" cy="18" r="3" /><circle cx="18" cy="16" r="3" />
+  </svg>
+  <span class="lp-art" id="lp-line-art" hidden></span>
+  <span class="lp-viewport" id="lp-line-viewport">
+    <span class="lp-text" id="lp-line-text"></span>
+  </span>
+</div>
+
+<style>
+  .lp-line {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    min-width: 0;
+    max-width: 100%;
+  }
+  .lp-line[hidden] {
+    display: none;
+  }
+
+  .lp-icon {
+    flex-shrink: 0;
+    color: var(--c-subtle);
+  }
+
+  .lp-art[hidden] {
+    display: none;
+  }
+  .lp-art {
+    width: 22px;
+    height: 22px;
+    border-radius: 5px;
+    flex-shrink: 0;
+    overflow: hidden;
+    background: var(--c-surface-alt);
+    display: block;
+  }
+  .lp-art :global(img) {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+  }
+
+  /* hard cap on how much room the track may take */
+  .lp-viewport {
+    max-width: 260px;
+    overflow: hidden;
+    white-space: nowrap;
+    font-size: 12px;
+    color: var(--c-muted);
+  }
+  /* fade the right edge so the loop reads as continuous, not clipped */
+  .lp-viewport.is-scrolling {
+    mask-image: linear-gradient(to right, black 88%, transparent 100%);
+    -webkit-mask-image: linear-gradient(to right, black 88%, transparent 100%);
+  }
+
+  .lp-text {
+    display: inline-block;
+    white-space: nowrap;
+  }
+  .lp-text :global(b) {
+    color: var(--c-body);
+    font-weight: 500;
+  }
+
+  .lp-viewport.is-scrolling .lp-text {
+    animation: lp-marquee var(--lp-duration, 12s) linear infinite;
+  }
+  @keyframes lp-marquee {
+    0%, 8% { transform: translateX(0); }
+    92%, 100% { transform: translateX(-50%); }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .lp-viewport.is-scrolling .lp-text {
+      animation: none;
+    }
+    /* no motion allowed, so clip instead of sliding */
+    .lp-viewport.is-scrolling {
+      text-overflow: ellipsis;
+      mask-image: none;
+      -webkit-mask-image: none;
+    }
+  }
+
+  @media (max-width: 520px) {
+    .lp-viewport {
+      max-width: 170px;
+    }
+  }
+</style>
+
+<script>
+  type LastPlayed = {
+    track?: string;
+    artist?: string;
+    image?: string;
+    isPlaying?: boolean;
+  };
+
+  function applyMarquee(viewport: HTMLElement, text: HTMLElement, label: string) {
+    viewport.classList.remove("is-scrolling");
+    text.style.removeProperty("--lp-duration");
+
+    if (text.scrollWidth <= viewport.clientWidth) return;
+
+    // duplicate the label so the loop has no visible gap at the wrap point
+    const spacer = "    ";
+    text.append(spacer + label + spacer);
+
+    viewport.classList.add("is-scrolling");
+    // constant speed regardless of length: ~26px per second
+    text.style.setProperty("--lp-duration", `${text.scrollWidth / 26}s`);
+  }
+
+  async function loadLastPlayedLine() {
+    const line = document.getElementById("lp-line");
+    const art = document.getElementById("lp-line-art");
+    const viewport = document.getElementById("lp-line-viewport");
+    const text = document.getElementById("lp-line-text");
+    if (!line || !art || !viewport || !text) return;
+
+    try {
+      const res = await fetch("/api/lastplayed");
+      const data = (await res.json()) as LastPlayed;
+      const hasTrack = !!data.track && data.track !== "Nothing playing";
+
+      let label = "Nothing playing";
+      if (hasTrack) {
+        label = data.artist ? `${data.track} · ${data.artist}` : data.track!;
+        const name = document.createElement("b");
+        name.textContent = data.track!;
+        text.replaceChildren(name);
+        if (data.artist) text.append(` · ${data.artist}`);
+      } else {
+        text.textContent = label;
+      }
+
+      if (hasTrack && data.image) {
+        const img = document.createElement("img");
+        img.src = data.image;
+        img.alt = "";
+        img.loading = "lazy";
+        art.replaceChildren(img);
+        art.removeAttribute("hidden");
+      } else {
+        art.setAttribute("hidden", "");
+      }
+
+      line.removeAttribute("hidden");
+      applyMarquee(viewport, text, label);
+    } catch {
+      /* leave the line hidden — a failed fetch should not print an error here */
+    }
+  }
+
+  loadLastPlayedLine();
+  document.addEventListener("astro:page-load", loadLastPlayedLine);
+</script>

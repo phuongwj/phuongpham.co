@@ -1,5 +1,6 @@
 ---
 import Project from '../components/Project.astro';
+import LastPlayedLine from '../components/footer/LastPlayedLine.astro';
 import GitHubContributions from '../components/footer/GitHubContributions.astro';
 import LastPlayed from '../components/footer/LastPlayed.astro';
 import { Navbar } from '../components/Navbar';
@@ -18,6 +19,9 @@ import Layout from '../layouts/Layout.astro';
 			<LastPlayed />
 		</div>
 		*/}
-		<p class="text-muted text-xs mt-8">&copy; 2026 Phuong. All rights reserved.</p>
+		<div class="flex items-center justify-between gap-4 mt-8">
+			<LastPlayedLine />
+			<p class="text-muted text-xs shrink-0">&copy; 2026 Phuong. All rights reserved.</p>
+		</div>
 	</section>
 </Layout>
