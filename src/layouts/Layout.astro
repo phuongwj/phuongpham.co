@@ -16,15 +16,22 @@ import "../styles/global.css";
 		<title>Phuong Pham - Software Engineer</title>
 		<script is:inline>
 			(function() {
-				function applyTheme() {
+				function isDark() {
 					const theme = localStorage.getItem('theme');
-					const dark = theme === 'dark' ||
+					return theme === 'dark' ||
 						(!theme && window.matchMedia('(prefers-color-scheme: dark)').matches);
-					document.documentElement.classList.toggle('dark', dark);
 				}
-				applyTheme();
-				// view transitions swap in a fresh <html>, so re-apply before it paints
-				document.addEventListener('astro:after-swap', applyTheme);
+				function applyTheme(root) {
+					root.classList.toggle('dark', isDark());
+					root.style.colorScheme = isDark() ? 'dark' : 'light';
+				}
+				applyTheme(document.documentElement);
+
+				// paint the incoming document before it is swapped in, otherwise the
+				// unthemed <html> lands on screen for a frame and flashes white
+				document.addEventListener('astro:before-swap', (e) => {
+					applyTheme(e.newDocument.documentElement);
+				});
 			})();
 		</script>
 	</head>

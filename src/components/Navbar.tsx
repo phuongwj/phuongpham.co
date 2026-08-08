@@ -23,8 +23,14 @@ function useTheme() {
   const toggle = () => {
     const next = !dark;
     setDark(next);
-    document.documentElement.classList.toggle("dark", next);
+
+    const root = document.documentElement;
+    // only the deliberate toggle animates the background; see .theme-anim
+    root.classList.add("theme-anim");
+    root.classList.toggle("dark", next);
+    root.style.colorScheme = next ? "dark" : "light";
     localStorage.setItem("theme", next ? "dark" : "light");
+    window.setTimeout(() => root.classList.remove("theme-anim"), 350);
   };
 
   return { dark, toggle };
