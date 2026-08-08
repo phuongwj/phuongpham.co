@@ -1,12 +1,25 @@
 ---
 import Project from '../components/Project.astro';
+import GitHubContributions from '../components/footer/GitHubContributions.astro';
+import LastPlayed from '../components/footer/LastPlayed.astro';
+import { StackTabs } from '../components/StackTabs';
 import { Navbar } from '../components/Navbar';
 import Layout from '../layouts/Layout.astro';
 ---
 
 <Layout>
-	<Navbar client:load currentPage="projects" />
+	<Navbar client:load currentPage="projects" transition:persist transition:name="navbar" />
 	<div class="mt-20">
 		<Project />
 	</div>
+	<section class="max-w-2xl mx-auto px-4 mt-4 pb-40 stagger-in" style="animation-delay: 200ms;">
+		<div class="mt-3">
+			<StackTabs client:load />
+		</div>
+		<div class="grid grid-cols-1 sm:grid-cols-[1fr_180px] gap-3 mt-3">
+			<GitHubContributions />
+			<LastPlayed />
+		</div>
+		<p class="text-muted text-xs mt-8">&copy; 2026 Phuong. All rights reserved.</p>
+	</section>
 </Layout>

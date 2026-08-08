@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useLayoutEffect, useRef, useState } from "react";
 import {
   IoHomeOutline,
   IoBriefcaseOutline,
@@ -12,27 +12,6 @@ const pages = [
   { id: "work", href: "/work", icon: IoBriefcaseOutline, label: "Work" },
   { id: "projects", href: "/projects", icon: IoCodeSlashOutline, label: "Projects" },
 ];
-
-function useLocalTime() {
-  const [time, setTime] = useState("");
-
-  useEffect(() => {
-    const update = () => {
-      setTime(
-        new Date().toLocaleTimeString("en-US", {
-          hour: "numeric",
-          minute: "2-digit",
-          timeZone: "America/Halifax",
-        })
-      );
-    };
-    update();
-    const id = setInterval(update, 30_000);
-    return () => clearInterval(id);
-  }, []);
-
-  return time;
-}
 
 function useTheme() {
   const [dark, setDark] = useState(false);
@@ -51,81 +30,109 @@ function useTheme() {
   return { dark, toggle };
 }
 
-export function Navbar({ currentPage }: { currentPage: string }) {
-  const [hovered, setHovered] = useState<string | null>(null);
-  const time = useLocalTime();
-  const { dark, toggle } = useTheme();
+/**
+ * The active pill slides between items of differing widths, so its position and
+ * size have to be measured from the DOM rather than computed from the index.
+ */
+function useActiveRect(currentPage: string) {
+  const trackRef = useRef<HTMLDivElement>(null);
+  const [rect, setRect] = useState<{ left: number; width: number } | null>(null);
 
-  const activeIndex = pages.findIndex((p) => p.id === currentPage);
+  useLayoutEffect(() => {
+    const track = trackRef.current;
+    const active = track?.querySelector<HTMLElement>(`[data-page="${currentPage}"]`);
+    if (!track || !active) return;
+
+    const measure = () =>
+      setRect({ left: active.offsetLeft, width: active.offsetWidth });
+
+    measure();
+
+    // labels shift once the webfont swaps in, so re-measure when it settles
+    const observer = new ResizeObserver(measure);
+    observer.observe(track);
+    return () => observer.disconnect();
+  }, [currentPage]);
+
+  return { trackRef, rect };
+}
+
+/**
+ * The navbar persists across client-side navigations, so its `currentPage` prop
+ * is frozen at whatever page first rendered it — the live value has to come
+ * from the URL instead.
+ */
+function useCurrentPage(initial: string) {
+  const [page, setPage] = useState(initial);
+
+  useEffect(() => {
+    const sync = () => {
+      const path = window.location.pathname.replace(/\/$/, "");
+      setPage(pages.find((p) => p.href.replace(/\/$/, "") === path)?.id ?? "home");
+    };
+    sync();
+    document.addEventListener("astro:page-load", sync);
+    return () => document.removeEventListener("astro:page-load", sync);
+  }, []);
+
+  return page;
+}
+
+export function Navbar({ currentPage: initialPage }: { currentPage: string }) {
+  const { dark, toggle } = useTheme();
+  const currentPage = useCurrentPage(initialPage);
+  const { trackRef, rect } = useActiveRect(currentPage);
 
   return (
-    <nav className="fixed top-5 left-1/2 -translate-x-1/2 z-50 w-full max-w-2xl px-4">
+    <nav className="fixed top-5 left-1/2 -translate-x-1/2 z-50 w-full max-w-2xl px-4 pointer-events-none">
       <div
-        className="flex items-center justify-between px-3 py-2 rounded-2xl border backdrop-blur-xl shadow-sm"
+        className="inline-flex items-center gap-1 p-[3px] rounded-[10px] border backdrop-blur-xl pointer-events-auto"
         style={{
           borderColor: "var(--c-border)",
-          background: "var(--c-bg-alpha)",
+          background: "var(--c-surface-alt)",
         }}
       >
-        <div className="relative flex items-center gap-1">
-          <div
-            className="absolute h-8 w-8 rounded-full transition-transform duration-300 ease-[cubic-bezier(0.23,1,0.32,1)]"
-            style={{
-              background: "var(--c-nav-active)",
-              transform: `translateX(${activeIndex * 36}px)`,
-            }}
-          />
-          {pages.map(({ id, href, icon: Icon, label }) => (
+        <div ref={trackRef} className="relative flex items-center">
+          {rect && (
             <div
+              className="absolute top-0 bottom-0 rounded-lg shadow-sm transition-[transform,width] duration-[450ms] ease-[cubic-bezier(0.32,0.72,0,1)]"
+              style={{
+                background: "var(--c-bg)",
+                border: "1px solid var(--c-border)",
+                width: rect.width,
+                transform: `translateX(${rect.left}px)`,
+              }}
+            />
+          )}
+          {pages.map(({ id, href, icon: Icon, label }) => (
+            <a
               key={id}
-              className="relative"
-              onMouseEnter={() => setHovered(id)}
-              onMouseLeave={() => setHovered(null)}
+              href={href}
+              data-page={id}
+              aria-current={currentPage === id ? "page" : undefined}
+              className="relative z-10 flex items-center gap-1.5 px-2.5 py-1 rounded-lg text-[12.5px] whitespace-nowrap transition-colors duration-200 ease-[cubic-bezier(0.23,1,0.32,1)]"
+              style={{
+                color:
+                  currentPage === id ? "var(--c-heading)" : "var(--c-muted)",
+                fontWeight: currentPage === id ? 500 : 400,
+              }}
             >
-              <a
-                href={href}
-                aria-label={label}
-                className="relative z-10 w-8 h-8 flex items-center justify-center rounded-full transition-[color,transform] duration-200 ease-[cubic-bezier(0.23,1,0.32,1)] active:scale-90"
-                style={{
-                  color:
-                    currentPage === id
-                      ? "var(--c-heading)"
-                      : "var(--c-muted)",
-                }}
-              >
-                <Icon size={16} />
-              </a>
-              <span
-                className="absolute left-1/2 top-full mt-3 px-2 py-1 text-[11px] font-medium backdrop-blur-md rounded-md whitespace-nowrap pointer-events-none"
-                style={{
-                  color: "var(--c-tooltip)",
-                  background: "var(--c-nav-active)",
-                  opacity: hovered === id ? 1 : 0,
-                  transform: `translateX(-50%) translateY(${hovered === id ? "0" : "-4px"})`,
-                  transition:
-                    "opacity 150ms cubic-bezier(0.23, 1, 0.32, 1), transform 150ms cubic-bezier(0.23, 1, 0.32, 1)",
-                }}
-              >
-                {label}
-              </span>
-            </div>
+              <Icon size={14} />
+              {label}
+            </a>
           ))}
         </div>
 
-        <div className="flex items-center gap-3">
-          <div
-            className="flex items-center gap-1.5 text-[11px] font-mono pr-1"
-            style={{ color: "var(--c-muted)" }}
-          >
-            <span>Halifax, CA</span>
-            <span>·</span>
-            <span>{time}</span>
-          </div>
+        <div className="flex items-center">
+          <span
+            className="w-px h-4 mr-1"
+            style={{ background: "var(--c-border)" }}
+          />
 
           <button
             onClick={toggle}
             aria-label="Toggle theme"
-            className="w-7 h-7 flex items-center justify-center rounded-full cursor-pointer transition-[color,background,transform] duration-200 ease-[cubic-bezier(0.23,1,0.32,1)] active:scale-90"
+            className="w-6 h-6 flex items-center justify-center rounded-full cursor-pointer transition-[color,background,transform] duration-200 ease-[cubic-bezier(0.23,1,0.32,1)] active:scale-90"
             style={{
               color: "var(--c-muted)",
               background: "transparent",

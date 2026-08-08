@@ -5,7 +5,7 @@ import Layout from '../layouts/Layout.astro';
 ---
 
 <Layout>
-	<Navbar client:load currentPage="work" />
+	<Navbar client:load currentPage="work" transition:persist transition:name="navbar" />
 	<div class="mt-20">
 		<Experience />
 	</div>
