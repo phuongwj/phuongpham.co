@@ -17,3 +17,11 @@
 | GET /api/transactions/group/:groupId/balances | 37 | 48 | 1.03 | 0.00% |
 | GET /api/transactions/balances | 36 | 62 | 1.03 | 0.00% |
 | POST /api/transactions/group/:groupId | 130 | 168 | 1.03 | 0.00% |
+
+**Table 3**
+
+| Endpoint | Avg (ms) | 95th percentile (ms) | Throughput (req/s) | Error % |
+|---|---|---|---|---|
+| GET /api/groups | 191 | 298 | 1.02 | 0.00% |
+| GET /api/groups/:id | 145 | 270 | 1.02 | 0.00% |
+| POST /api/auth/login | 470 | 720 | 1.02 | 0.00% |
