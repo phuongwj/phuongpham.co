@@ -1,3 +1,5 @@
+# API Endpoints
+
 **Table 1**
 
 | Endpoint | Avg (ms) | 95th percentile (ms) | Throughput (req/s) | Error % |
@@ -18,10 +20,24 @@
 | GET /api/transactions/balances | 36 | 62 | 1.03 | 0.00% |
 | POST /api/transactions/group/:groupId | 130 | 168 | 1.03 | 0.00% |
 
-**Table 3**
+# JMeter
+
+**Table X+2**
 
 | Endpoint | Avg (ms) | 95th percentile (ms) | Throughput (req/s) | Error % |
 |---|---|---|---|---|
-| GET /api/groups | 191 | 298 | 1.02 | 0.00% |
-| GET /api/groups/:id | 145 | 270 | 1.02 | 0.00% |
-| POST /api/auth/login | 470 | 720 | 1.02 | 0.00% |
+| GET /api/groups (control) | 188 | 269 | 1.02 | 0.00% |
+| GET /api/groups/:id (control) | 139 | 235 | 1.02 | 0.00% |
+| GET /api/transactions/balances | 147 | 226 | 1.02 | 0.00% |
+| GET /api/transactions/group/:groupId/balances | 156 | 276 | 1.02 | 0.00% |
+| POST /api/auth/login (control) | 480 | 792 | 1.02 | 0.00% |
+
+**Table X+3: JMeter results after parallelizing the balance endpoint queries**
+
+| Endpoint | Avg (ms) | 95th percentile (ms) | Throughput (req/s) | Error % |
+|---|---|---|---|---|
+| GET /api/groups (control) | 211 | 331 | 1.02 | 0.00% |
+| GET /api/groups/:id (control) | 146 | 279 | 1.02 | 0.00% |
+| GET /api/transactions/balances | 153 | 281 | 1.02 | 0.00% |
+| GET /api/transactions/group/:groupId/balances | 162 | 288 | 1.02 | 0.00% |
+| POST /api/auth/login (control) | 480 | 866 | 1.02 | 0.00% |
