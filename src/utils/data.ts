@@ -38,6 +38,16 @@ export const experience = [
         description: "Migrated legacy admin systems to a multi-tenant Go/Vue stack.",
         stack: ["Go", "TypeScript", "Vue.js", "PostgreSQL"],
         active: false
+    },
+    {
+        company: "ReelData AI",
+        position: "Infrastructure Engineer Intern",
+        location: "Halifax, NS",
+        duration: "Sep 2026 - Present",
+        image: "/logos/logo_reeldata.png",
+        description: "Building and maintaining cloud infrastructure for AI-powered aquaculture systems .",
+        stack: ["Linux", "AWS", "Terraform", "Kubernetes", "Docker","Python"],
+        active: true
     }
 ]
 
