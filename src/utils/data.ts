@@ -44,7 +44,7 @@ export const experience = [
         position: "Infrastructure Engineer Intern",
         location: "Halifax, NS",
         duration: "Sep 2026 - Present",
-        image: "/logos/logo_reeldata.png",
+        image: "/logos/logo_reeldata.jpeg",
         description: "Building and maintaining cloud infrastructure for AI-powered aquaculture systems .",
         stack: ["Linux", "AWS", "Terraform", "Kubernetes", "Docker","Python"],
         active: true
