@@ -6,7 +6,6 @@ export const experience = [
         duration: "Jun - Aug 2024",
         image: "/logos/logo_dal.png",
         description: "Built responsive, accessible interfaces with bilingual support.",
-        stack: ["JavaScript", "React", "Sass", "Framer Motion", "i18n"],
         active: false
     },
     {
@@ -16,7 +15,6 @@ export const experience = [
         duration: "Sep 2024 - May 2025",
         image: "/logos/logo_dal.png",
         description: "Taught intro programming, computer science and web development.",
-        stack: ["Java", "JavaScript"],
         active: false
     },
     {
@@ -26,7 +24,6 @@ export const experience = [
         duration: "May - Aug 2025",
         image: "/logos/logo_sprypoint.png",
         description: "Built a Java PDF reporting system used by 5 water utilities.",
-        stack: ["Java", "JavaScript", "Play Framework", "KnockoutJS", "jQuery"],
         active: false
     },
     {
@@ -36,7 +33,6 @@ export const experience = [
         duration: "Jan 2026 - Apr 2026",
         image: "/logos/logo_praxes.jpg",
         description: "Migrated legacy admin systems to a multi-tenant Go/Vue stack.",
-        stack: ["Go", "TypeScript", "Vue.js", "PostgreSQL"],
         active: false
     },
     {
@@ -46,7 +42,6 @@ export const experience = [
         duration: "Sep 2026 - Present",
         image: "/logos/logo_reeldata.jpeg",
         description: "Building and maintaining cloud infrastructure for AI-powered aquaculture systems .",
-        stack: ["Linux", "AWS", "Terraform", "Kubernetes", "Docker","Python"],
         active: true
     }
 ]
