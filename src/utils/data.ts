@@ -10,7 +10,7 @@ export const experience = [
     },
     {
         company: "Dalhousie University",
-        position: "Undergraduate Teaching Assistant",
+        position: "Teaching Assistant",
         location: "Halifax, NS",
         duration: "Sep 2024 - May 2025",
         image: "/logos/logo_dal.png",
