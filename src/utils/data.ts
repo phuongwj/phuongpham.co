@@ -30,7 +30,7 @@ export const experience = [
         company: "PRAXES Medical Group",
         position: "Full-Stack Software Engineer Intern",
         location: "Halifax, NS",
-        duration: "Jan 2026 - Apr 2026",
+        duration: "Jan - Apr 2026",
         image: "/logos/logo_praxes.jpg",
         description: "Migrated legacy admin systems to a multi-tenant Go/Vue stack.",
         active: false
