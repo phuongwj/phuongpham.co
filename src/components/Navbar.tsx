@@ -4,6 +4,7 @@ import { IoSunnyOutline, IoMoonOutline } from "react-icons/io5";
 const pages = [
   { id: "home", href: "/", label: "Home" },
   { id: "projects", href: "/projects", label: "Projects" },
+  { id: "food", href: "/food", label: "Food" },
 ];
 
 function useTheme() {

@@ -1,0 +1,12 @@
+---
+import Layout from '../layouts/Layout.astro';
+import { Navbar } from '../components/Navbar';
+import Food from '../components/Food.astro';
+---
+
+<Layout>
+	<Navbar client:load currentPage="food" transition:persist transition:name="navbar" />
+    <div class="mt-28">
+        <Food />
+	</div>
+</Layout>
