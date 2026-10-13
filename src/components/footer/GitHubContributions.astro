@@ -7,20 +7,23 @@ function getCellLevel(count: number): number {
 }
 ---
 
-<div class="rounded-2xl border p-4 overflow-hidden" style="border-color: var(--c-border); background: var(--c-surface);">
-  <div class="flex items-start justify-between mb-3">
-    <p class="text-muted text-[11px] font-mono uppercase tracking-wider">github contributions</p>
-    <p id="gh-hover-info" class="text-subtle text-[10px] font-mono text-right min-h-3.75 min-w-35">&nbsp;</p>
-  </div>
+<div>
+  <h2 class="text-body text-[14px] font-medium mb-3">GitHub Contributions</h2>
+  <div class="gh-card rounded-2xl border p-4 overflow-hidden">
+    <div class="flex justify-end mb-3">
+      <p id="gh-hover-info" class="text-subtle text-[10px] font-mono text-right min-h-3.75 min-w-35">&nbsp;</p>
+    </div>
 
-  <div id="gh-grid" class="flex gap-0.75 overflow-x-auto scrollbar-none">
-    <p class="text-muted text-xs font-mono">Loading...</p>
-  </div>
+    <div id="gh-grid" class="flex gap-0.75 overflow-x-auto scrollbar-none">
+      <p class="text-muted text-xs font-mono">Loading...</p>
+    </div>
 
-  <p class="text-subtle text-[10px] font-mono mt-2" id="gh-total">&nbsp;</p>
+    <p class="text-subtle text-[10px] font-mono mt-2" id="gh-total">&nbsp;</p>
+  </div>
 </div>
 
 <style is:global>
+  .gh-card { border-color: var(--c-border); background: var(--c-card); }
   .gh-level-0 { background-color: var(--c-gh-0); }
   .gh-level-1 { background-color: var(--c-gh-1); }
   .gh-level-2 { background-color: var(--c-gh-2); }

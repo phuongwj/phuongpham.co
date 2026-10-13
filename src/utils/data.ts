@@ -55,18 +55,6 @@ export const stack = {
 
 export const projects = [
     {
-        name: "My Turn",
-        description: "Real-time meeting participation analyzer",
-        stack : ["Python", "Flask", "WhisperX", "React", "Docker"],
-        github: "https://github.com/niaxidos/MyTurn"
-    },
-    {
-        name: "Women in Technology Society Bulletin Board",
-        description: "Interactive web app for sharing self-drawn portraits and bios at a society expo",
-        stack: ["React", "Supabase"],
-        github: "https://github.com/phuongwj/wits-bulletin-board"
-    },
-    {
         name: "Medical AI Assistant",
         description: "Lightweight Retrieval-Augmented Generation FAQ chatbot for reducing clinician administrative burden in medical centres",
         stack: ["AWS EBS, VPC, S3, RDS", "Gemini", "HTML/CSS", "Node.js", "Express.js"],
