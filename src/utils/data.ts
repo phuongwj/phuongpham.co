@@ -41,7 +41,7 @@ export const experience = [
         location: "Halifax, NS",
         duration: "Sep 2026 - Present",
         image: "/logos/logo_reeldata.jpeg",
-        description: "Building and maintaining cloud infrastructure for AI-powered aquaculture systems .",
+        description: "Building and maintaining cloud infrastructure for AI-powered aquaculture systems.",
         active: true
     }
 ]
