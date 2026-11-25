@@ -52,29 +52,30 @@
 }
 
 .dark {
-  --c-bg: oklch(0.13 0.015 250);
-  --c-bg-alpha: oklch(0.13 0.015 250 / 0.85);
-  --c-surface: oklch(0.18 0.012 250);
-  --c-surface-alt: oklch(0.22 0.01 250);
-  --c-surface-hover: oklch(0.24 0.012 250);
-  --c-nav-active: oklch(0.25 0.012 250);
-  --c-border: oklch(0.26 0.012 250);
-  --c-border-hover: oklch(0.32 0.012 250);
-  --c-subtle: oklch(0.45 0.008 250);
-  --c-muted-alt: oklch(0.5 0.008 250);
-  --c-muted: oklch(0.58 0.008 250);
-  --c-body: oklch(0.7 0.008 250);
-  --c-tooltip: oklch(0.85 0.005 250);
-  --c-heading: oklch(0.92 0.005 250);
+  /* neutral black: background is #0F0F0F, surfaces step up from it */
+  --c-bg: oklch(0.1685 0 0);
+  --c-bg-alpha: oklch(0.1685 0 0 / 0.85);
+  --c-surface: oklch(0.2185 0 0);
+  --c-surface-alt: oklch(0.2585 0 0);
+  --c-surface-hover: oklch(0.2785 0 0);
+  --c-nav-active: oklch(0.2885 0 0);
+  --c-border: oklch(0.2985 0 0);
+  --c-border-hover: oklch(0.3585 0 0);
+  --c-subtle: oklch(0.45 0 0);
+  --c-muted-alt: oklch(0.5 0 0);
+  --c-muted: oklch(0.58 0 0);
+  --c-body: oklch(0.7 0 0);
+  --c-tooltip: oklch(0.85 0 0);
+  --c-heading: oklch(0.92 0 0);
 
   --c-active-border: oklch(0.3 0.08 155);
   --c-active-text: oklch(0.7 0.1 155);
   --c-active-bg: oklch(0.22 0.05 155);
   --c-active-dot: oklch(0.6 0.2 155);
-  --c-inactive-dot: oklch(0.45 0.008 250);
+  --c-inactive-dot: oklch(0.45 0 0);
 
-  --c-inset: oklch(0.165 0.012 250);
-  --c-inset-item: oklch(0.22 0.01 250);
+  --c-inset: oklch(0.2035 0 0);
+  --c-inset-item: oklch(0.2585 0 0);
 
   --c-gh-0: oklch(0.22 0.02 155);
   --c-gh-1: oklch(0.4 0.1 155);
@@ -82,17 +83,17 @@
   --c-gh-3: oklch(0.62 0.15 155);
 
   /* flat segmented navbar: track sits below the page, pill rises back to it */
-  --c-divider: oklch(0.225 0.012 250);
+  --c-divider: oklch(0.2635 0 0);
   --c-nav-divider: oklch(1 0 0 / 0.12);
-  --c-nav-blur: oklch(0.13 0.015 250 / 0.72);
-  --c-nav-item: oklch(0.65 0.008 250);
-  --c-nav-item-hover: oklch(0.85 0.006 250);
-  --c-nav-item-active: oklch(0.97 0.004 250);
+  --c-nav-blur: oklch(0.1685 0 0 / 0.72);
+  --c-nav-item: oklch(0.65 0 0);
+  --c-nav-item-hover: oklch(0.85 0 0);
+  --c-nav-item-active: oklch(0.97 0 0);
   --c-nav-tgl-hover-bg: oklch(1 0 0 / 0.07);
 
   /* dark has no usable cast shadow, so the lift comes from a lighter surface
      plus a top-edge highlight; the shadow only deepens the seam */
-  --c-card: oklch(0.195 0.012 250);
+  --c-card: oklch(0.2335 0 0);
   --c-card-lift: inset 0 1px 0 oklch(1 0 0 / 0.045),
                  0 4px 14px -8px oklch(0 0 0 / 0.55);
   --c-card-lift-hover: inset 0 1px 0 oklch(1 0 0 / 0.07),
